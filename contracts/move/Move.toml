@@ -1,0 +1,13 @@
+[package]
+name = 'Bridge'
+version = '1.0.0'
+upgrade_policy = 'compatible'
+
+[dependencies]
+AptosFramework = { local = "../../../aptos-core/aptos-move/framework/aptos-framework" }
+
+[addresses]
+owner = '_'
+
+[dev-addresses]
+owner = '0xf'
