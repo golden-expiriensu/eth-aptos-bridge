@@ -1,0 +1,10 @@
+{
+  "name": "@eth-aptos-bridge/monorepo",
+  "version": "1.0.0",
+  "author": "Danil Menkin",
+  "description": "A bridge between ethereum and aptos blockchains",
+  "workspaces": [
+    "contracts/*"
+  ],
+  "license": "MIT"
+}
