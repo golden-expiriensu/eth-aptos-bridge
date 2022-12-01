@@ -11,8 +11,8 @@ import {Pool} from "./base/Pool.sol";
 contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     using Counters for Counters.Counter;
 
-    event Swapped(Receipt receipt);
-    event Redeemed(Receipt receipt);
+    event Sent(Receipt receipt);
+    event Claimed(Receipt receipt);
 
     Counters.Counter nonce;
 
@@ -21,7 +21,7 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
         OwnableImmutable(_owner)
     {}
 
-    function swap(
+    function send(
         string calldata _tokenName,
         uint256 _chainTo,
         address _recipient,
@@ -29,7 +29,7 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     ) external {
         _burn(_tokenName, msg.sender, _amount);
 
-        emit Swapped(
+        emit Sent(
             Receipt({
                 from: msg.sender,
                 to: _recipient,
@@ -44,13 +44,13 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
         nonce.increment();
     }
 
-    function redeem(Receipt calldata _receipt, bytes calldata _signature)
+    function claim(Receipt calldata _receipt, bytes calldata _signature)
         external
     {
         _useReceipt(_receipt, _signature);
 
         _mint(_receipt.tokenName, _receipt.to, _receipt.amount);
 
-        emit Redeemed(_receipt);
+        emit Claimed(_receipt);
     }
 }

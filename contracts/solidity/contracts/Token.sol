@@ -8,8 +8,12 @@ contract Token is ERC20, OwnableImmutable {
     constructor(
         string memory _name,
         string memory _symbol,
-        address _owner
-    ) ERC20(_name, _symbol) OwnableImmutable(_owner) {}
+        uint256 _initialSupply,
+        address _initialSupplyOwner,
+        address _contractOwner
+    ) ERC20(_name, _symbol) OwnableImmutable(_contractOwner) {
+        _mint(_initialSupplyOwner, _initialSupply);
+    }
 
     function mint(address _to, uint256 _amount) external onlyOwner {
         _mint(_to, _amount);
