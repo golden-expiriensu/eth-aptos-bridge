@@ -41,7 +41,7 @@ abstract contract ReceiptVerifier is Roles {
     {
         return
             keccak256(
-                abi.encode(
+                abi.encodePacked(
                     _receipt.from,
                     _receipt.to,
                     _receipt.tokenName,
