@@ -7,7 +7,7 @@ upgrade_policy = 'compatible'
 AptosFramework = { local = "../../../aptos-core/aptos-move/framework/aptos-framework" }
 
 [addresses]
-owner = '_'
+platform = '_'
 
 [dev-addresses]
-owner = '0xf'
+platform = '0xf'
