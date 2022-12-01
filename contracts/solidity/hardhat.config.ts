@@ -22,43 +22,28 @@ if (!process.env.SIGNER_PRIVATE_KEY)
 const config: HardhatUserConfig = {
   solidity: "0.8.16",
   namedAccounts: {
-    deployer: 0,
-    owner: 1,
-    signer: 2,
+    deployer: {
+      hardhat: 0,
+      goerli: "privatekey://" + process.env.DEPLOYER_PRIVATE_KEY,
+    },
+    owner: {
+      hardhat: 1,
+      goerli: "privatekey://" + process.env.OWNER_PRIVATE_KEY,
+    },
+    signer: {
+      hardhat: 2,
+      goerli: "privatekey://" + process.env.SIGNER_PRIVATE_KEY,
+    },
   },
   networks: {
-    ropsen: {
-      url: process.env.ROPSEN_URL || "",
+    goerli: {
+      url: process.env.GOERLI_URL || "",
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY,
         process.env.OWNER_PRIVATE_KEY,
         process.env.SIGNER_PRIVATE_KEY,
       ],
-    },
-    bscTestnet: {
-      url: process.env.BCS_TESTNET_URL || "",
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY,
-        process.env.OWNER_PRIVATE_KEY,
-        process.env.SIGNER_PRIVATE_KEY,
-      ],
-    },
-    polygonMumbai: {
-      url: process.env.MUMBAI_URL || "",
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY,
-        process.env.OWNER_PRIVATE_KEY,
-        process.env.SIGNER_PRIVATE_KEY,
-      ],
-    },
-    avalancheFujiTestnet: {
-      url: process.env.AVAX_FUJI || "",
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY,
-        process.env.OWNER_PRIVATE_KEY,
-        process.env.SIGNER_PRIVATE_KEY,
-      ],
-    },
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
@@ -66,10 +51,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      ropsen: process.env.ETHERSCAN_API_KEY ?? "",
-      bscTestnet: process.env.BSCSCAN_API_KEY ?? "",
-      polygonMumbai: process.env.POLYGONSCAN_API_KEY ?? "",
-      avalancheFujiTestnet: process.env.AVASCAN_API_KEY ?? "",
+      goerli: process.env.ETHERSCAN_API_KEY ?? "",
     },
   },
 };
