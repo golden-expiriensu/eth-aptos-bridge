@@ -5,6 +5,7 @@
     "dotenv": "^16.0.3"
   },
   "devDependencies": {
+    "@types/node": "^18.11.10",
     "ts-node": "^10.9.1"
   }
 }
