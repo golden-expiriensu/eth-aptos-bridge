@@ -1,14 +1,12 @@
-import { AptosAccount, HexString } from 'aptos';
+import { HexString } from 'aptos';
 
-import { TokenClient } from '../../types';
-import { TOKEN_CONFIG } from './config';
+import { CustomAptosAccount, TokenClient } from '../../types';
+import { processTransaction, TOKEN_CONFIG } from './common';
 
 require("dotenv").config();
 
 async function main() {
-  const privateKey = new HexString(process.env.PRIVATE_KEY!);
-  
-  const account = new AptosAccount(privateKey.toUint8Array());
+  const account = new CustomAptosAccount(process.env.PRIVATE_KEY!);
   const client = new TokenClient(
     process.env.NODE_URL!,
     TOKEN_CONFIG.moduleName,
@@ -16,10 +14,7 @@ async function main() {
     new HexString(process.env.TOKEN_ADDRESS!)
   );
 
-  const txnHash = await client.transfer(account, account.address(), BigInt("0xf"));
-  await client.waitForTransaction(txnHash, { checkSuccess: true });
-  
-  console.log("Success");
+  await processTransaction(client, () => client.transfer(account, account.address(), BigInt("0xf")));
 }
 
 main().catch((e) => console.error(e));
