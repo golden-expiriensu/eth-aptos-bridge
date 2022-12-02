@@ -17,8 +17,8 @@ const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY!);
 console.log('Starting to listen events...');
 
 contract.on("Sent", (receipt) => {
-  console.log('Catched "Sent" event:', parseReceipt(receipt));
   signReceipt(ethers, receipt, signer).then((signed: string) => {
+    console.log('Catched "Sent" event:', parseReceipt(receipt));
     console.log('\nSigned payload:', signed);
   });
 });
