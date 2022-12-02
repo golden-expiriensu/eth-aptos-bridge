@@ -10,7 +10,7 @@ export class TokenClient extends AptosClient {
       private coinModuleAddress: HexString
     ) {
       super(nodeUrl);
-      this.coinType = `${coinModuleAddress.hex()}::${coinModuleName}::${coinPhantomType}"`;
+      this.coinType = `${coinModuleAddress.hex()}::${coinModuleName}::${coinPhantomType}`;
     }
   
     async register(signer: AptosAccount): Promise<string> {
@@ -60,7 +60,8 @@ export class TokenClient extends AptosClient {
         );
   
         return parseInt((resource.data as any)["coin"]["value"]);
-      } catch (_) {
+      } catch (e) {
+        console.error(e);
         return 0;
       }
     }
