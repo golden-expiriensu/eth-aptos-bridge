@@ -1,0 +1,10 @@
+{
+  "name": "@eth-aptos-bridge/move",
+  "dependencies": {
+    "aptos": "^1.4.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
