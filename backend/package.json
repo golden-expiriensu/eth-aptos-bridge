@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@types/node": "^18.11.10",
+    "aptos": "^1.4.0",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2"
   },
