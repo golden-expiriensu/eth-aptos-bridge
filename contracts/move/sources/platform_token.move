@@ -18,7 +18,12 @@ module platform::PlatformToken {
 
     const ENOT_OWNER: u64 = 0;
 
-    public entry fun initialize<SupportedToken>(account: &signer, name: vector<u8>, symbol: vector<u8>) {
+    public entry fun initialize<SupportedToken>(
+        account: &signer,
+        name: vector<u8>,
+        symbol: vector<u8>,
+        initial_supply: u64
+    ) {
         assert!(address_of(account) == @platform, ENOT_OWNER);
         
         let (burn_capability, freeze_capability, mint_capability) = coin::initialize<SupportedToken>(
@@ -31,6 +36,11 @@ module platform::PlatformToken {
 
         coin::destroy_freeze_cap(freeze_capability);
 
+        if (initial_supply > 0) {
+            coin::register<SupportedToken>(account);
+            mint_to(address_of(account), initial_supply, &mint_capability);
+        };
+
         move_to<Capabilities<SupportedToken>>(account, Capabilities<SupportedToken> {
             mint_capability,
             burn_capability
@@ -40,15 +50,22 @@ module platform::PlatformToken {
     public(friend) fun mint<SupportedToken>(to: address, amount: u64) acquires Capabilities {
         let capabilities = borrow_global<Capabilities<SupportedToken>>(@platform);
 
-        let resourse = coin::mint<SupportedToken>(amount, &capabilities.mint_capability);
-
-        coin::deposit(to, resourse);
+        mint_to(to, amount, &capabilities.mint_capability);
     }
 
     public(friend) fun burn<SupportedToken>(from: address, amount: u64) acquires Capabilities {
         let capabilities = borrow_global<Capabilities<SupportedToken>>(@platform);
 
         coin::burn_from<SupportedToken>(from, amount, &capabilities.burn_capability);
+    }
+
+    fun mint_to<SupportedToken>(
+        to: address, 
+        amount: u64, 
+        mint_cap: &coin::MintCapability<SupportedToken>
+    ) {
+        let resourse = coin::mint<SupportedToken>(amount, mint_cap);
+        coin::deposit(to, resourse);
     }
 
     #[test_only]
