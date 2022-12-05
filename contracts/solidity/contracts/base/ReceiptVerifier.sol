@@ -13,7 +13,7 @@ abstract contract ReceiptVerifier is Roles {
 
     struct Receipt {
         address from;
-        address to;
+        bytes to;
         string tokenName;
         uint256 amount;
         uint256 chainFrom;

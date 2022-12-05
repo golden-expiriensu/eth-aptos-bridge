@@ -8,6 +8,8 @@ import {Roles} from "./base/Roles.sol";
 import {ReceiptVerifier} from "./base/ReceiptVerifier.sol";
 import {Pool} from "./base/Pool.sol";
 
+error InvalidAddressLength(uint);
+
 contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     using Counters for Counters.Counter;
 
@@ -24,7 +26,7 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     function send(
         string calldata _tokenName,
         uint256 _chainTo,
-        address _recipient,
+        bytes calldata _recipientAddress,
         uint256 _amount
     ) external {
         _burn(_tokenName, msg.sender, _amount);
@@ -32,7 +34,7 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
         emit Sent(
             Receipt({
                 from: msg.sender,
-                to: _recipient,
+                to: _recipientAddress,
                 tokenName: _tokenName,
                 amount: _amount,
                 chainFrom: block.chainid,
@@ -47,9 +49,17 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     function claim(Receipt calldata _receipt, bytes calldata _signature)
         external
     {
+        if (_receipt.to.length != 20) revert InvalidAddressLength(_receipt.to.length);
+        
         _useReceipt(_receipt, _signature);
 
-        _mint(_receipt.tokenName, _receipt.to, _receipt.amount);
+        bytes memory unpacked = _receipt.to;
+        address to;
+        assembly {
+            to := mload(add(unpacked, 20))
+        }
+
+        _mint(_receipt.tokenName, to, _receipt.amount);
 
         emit Claimed(_receipt);
     }
