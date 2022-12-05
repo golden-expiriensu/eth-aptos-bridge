@@ -6,12 +6,12 @@ import { processTransaction } from '../common';
 
 require("dotenv").config();
 
-async function main(moduleName: string, phantomType: string) {
+async function main(moduleName: string, coinType: string) {
   const account = new CustomAptosAccount(process.env.PRIVATE_KEY!);
   const client = new TokenClient(
     process.env.NODE_URL!,
     moduleName,
-    phantomType,
+    coinType,
     new HexString(process.env.TOKEN_ADDRESS!)
   );
 

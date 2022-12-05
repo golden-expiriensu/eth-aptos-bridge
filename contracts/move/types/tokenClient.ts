@@ -1,44 +1,29 @@
 import { AptosAccount, AptosClient, HexString, MaybeHexString } from 'aptos';
 
 export class TokenClient extends AptosClient {
-    private coinType: string;
-      
     constructor(
       nodeUrl: string,
       private coinModuleName: string,
-      coinPhantomType: string,
+      private coinType: string,
       private coinModuleAddress: HexString
     ) {
       super(nodeUrl);
-      this.coinType = `${coinModuleAddress.hex()}::${coinModuleName}::${coinPhantomType}`;
     }
   
     async initialize(
       owner: AptosAccount,
       name: string,
       symbol: string,
+      decimals: number,
       initialSupply: bigint | number
     ): Promise<string> {
       const rawTxn = await this.generateTransaction(owner.address(), {
-        function: `${this.coinModuleAddress.hex()}::${this.coinModuleName}::mint`,
+        function: `${this.coinModuleAddress.hex()}::${this.coinModuleName}::initialize`,
         type_arguments: [this.coinType],
-        arguments: [name, symbol, initialSupply],
+        arguments: [name, symbol, decimals, initialSupply],
       });
   
       const bcsTxn = await this.signTransaction(owner, rawTxn);
-      const pendingTxn = await this.submitTransaction(bcsTxn);
-  
-      return pendingTxn.hash;
-    }
-  
-    async register(signer: AptosAccount): Promise<string> {
-      const rawTxn = await this.generateTransaction(signer.address(), {
-        function: `${this.coinModuleAddress.hex()}::${this.coinModuleName}::register`,
-        type_arguments: [],
-        arguments: [],
-      });
-  
-      const bcsTxn = await this.signTransaction(signer, rawTxn);
       const pendingTxn = await this.submitTransaction(bcsTxn);
   
       return pendingTxn.hash;
