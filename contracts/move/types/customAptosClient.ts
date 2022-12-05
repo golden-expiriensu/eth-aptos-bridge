@@ -12,6 +12,6 @@ export class CustomAptosAccount extends AptosAccount {
             }
         }
         
-        super(privateKeyBytes);
+        super(privateKeyBytes, address);
     }
 }
