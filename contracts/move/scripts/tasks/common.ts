@@ -1,10 +1,5 @@
 import { AptosAccount, AptosClient, HexString } from 'aptos';
 
-export const TOKEN_CONFIG = {
-    moduleName: "BrandNewToken",
-    phantomType: "Token"
-}
-
 export const createAptosAccount = (privateKey: string): AptosAccount => {
     const privateKeyHex = new HexString(privateKey);
     return new AptosAccount(privateKeyHex.toUint8Array());
