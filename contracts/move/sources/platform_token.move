@@ -22,6 +22,7 @@ module platform::PlatformToken {
         account: &signer,
         name: vector<u8>,
         symbol: vector<u8>,
+        decimal: u8,
         initial_supply: u64
     ) {
         assert!(address_of(account) == @platform, ENOT_OWNER);
@@ -30,7 +31,7 @@ module platform::PlatformToken {
             account,
             string::utf8(name),
             string::utf8(symbol),
-            18,
+            decimal,
             true,
         );
 

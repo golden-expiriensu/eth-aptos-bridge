@@ -131,7 +131,7 @@ module platform::BridgeTests {
     fun initialize_modules(): signer {
         let account = create_account_for_test(@platform);
 
-        PlatformToken::initialize<USDT>(&account, b"Tether", b"USDT", 0);        
+        PlatformToken::initialize<USDT>(&account, b"Tether", b"USDT", 9, 0);        
         Bridge::initialize(&account, PLATFORM_FEE, @platform);
         Bridge::add_token_support<USDT>(&account);
 
