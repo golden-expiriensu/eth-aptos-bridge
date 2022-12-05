@@ -15,7 +15,12 @@ async function main(moduleName: string, phantomType: string) {
     new HexString(process.env.TOKEN_ADDRESS!)
   );
 
-  await processTransaction(client, () => client.mint(account, account.address(), BigInt(argv[4])));
+  await processTransaction(client, () => client.initialize(
+    account,
+    "Tether",
+    "USDT",
+    BigInt(argv[4])
+  ));
 }
 
 main(argv[2], argv[3]).catch((e) => console.error(e));
