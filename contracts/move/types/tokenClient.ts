@@ -13,6 +13,24 @@ export class TokenClient extends AptosClient {
       this.coinType = `${coinModuleAddress.hex()}::${coinModuleName}::${coinPhantomType}`;
     }
   
+    async initialize(
+      owner: AptosAccount,
+      name: string,
+      symbol: string,
+      initialSupply: bigint | number
+    ): Promise<string> {
+      const rawTxn = await this.generateTransaction(owner.address(), {
+        function: `${this.coinModuleAddress.hex()}::${this.coinModuleName}::mint`,
+        type_arguments: [this.coinType],
+        arguments: [name, symbol, initialSupply],
+      });
+  
+      const bcsTxn = await this.signTransaction(owner, rawTxn);
+      const pendingTxn = await this.submitTransaction(bcsTxn);
+  
+      return pendingTxn.hash;
+    }
+  
     async register(signer: AptosAccount): Promise<string> {
       const rawTxn = await this.generateTransaction(signer.address(), {
         function: `${this.coinModuleAddress.hex()}::${this.coinModuleName}::register`,
@@ -21,19 +39,6 @@ export class TokenClient extends AptosClient {
       });
   
       const bcsTxn = await this.signTransaction(signer, rawTxn);
-      const pendingTxn = await this.submitTransaction(bcsTxn);
-  
-      return pendingTxn.hash;
-    }
-  
-    async mint(minter: AptosAccount, receiverAddress: HexString, amount: number | bigint): Promise<string> {
-      const rawTxn = await this.generateTransaction(minter.address(), {
-        function: `${this.coinModuleAddress.hex()}::${this.coinModuleName}::mint`,
-        type_arguments: [],
-        arguments: [receiverAddress.hex(), amount],
-      });
-  
-      const bcsTxn = await this.signTransaction(minter, rawTxn);
       const pendingTxn = await this.submitTransaction(bcsTxn);
   
       return pendingTxn.hash;
