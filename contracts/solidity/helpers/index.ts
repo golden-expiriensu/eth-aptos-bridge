@@ -5,7 +5,7 @@ import { Address } from "hardhat-deploy/types";
 export type Receipt = {
   from: Address;
   to: Address;
-  tokenName: string;
+  tokenSymbol: string;
   amount: BigNumber;
   chainFrom: BigNumber;
   chainTo: BigNumber;
@@ -16,7 +16,7 @@ export const parseReceipt = (receipt: any): Receipt => {
   return {
     from: receipt.from,
     to: receipt.to,
-    tokenName: receipt.tokenName,
+    tokenSymbol: receipt.tokenSymbol,
     amount: receipt.amount,
     chainFrom: receipt.chainFrom,
     chainTo: receipt.chainTo,
@@ -41,7 +41,7 @@ export const signReceipt = async (
     [
       receipt.from,
       receipt.to,
-      receipt.tokenName,
+      receipt.tokenSymbol,
       receipt.amount,
       receipt.chainFrom,
       receipt.chainTo,

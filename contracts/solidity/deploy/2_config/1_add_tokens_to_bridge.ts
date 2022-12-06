@@ -13,7 +13,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const tokenAddress = (await ethers.getContract(TOKEN.name)).address;
   const bridge = await ethers.getContract<Bridge>("Bridge");
 
-  await bridge.connect(owner).setTokenAddress(TOKEN.name, tokenAddress);
+  await bridge.connect(owner).setTokenAddress(TOKEN.symbol, tokenAddress);
 };
 
 export default func;

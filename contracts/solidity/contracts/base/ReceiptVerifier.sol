@@ -14,7 +14,7 @@ abstract contract ReceiptVerifier is Roles {
     struct Receipt {
         address from;
         bytes to;
-        string tokenName;
+        string tokenSymbol;
         uint256 amount;
         uint256 chainFrom;
         uint256 chainTo;
@@ -44,7 +44,7 @@ abstract contract ReceiptVerifier is Roles {
                 abi.encodePacked(
                     _receipt.from,
                     _receipt.to,
-                    _receipt.tokenName,
+                    _receipt.tokenSymbol,
                     _receipt.amount,
                     _receipt.chainFrom,
                     _receipt.chainTo,

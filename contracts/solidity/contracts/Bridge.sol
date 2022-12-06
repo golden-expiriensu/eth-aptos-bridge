@@ -24,18 +24,18 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     {}
 
     function send(
-        string calldata _tokenName,
+        string calldata _tokenSymbol,
         uint256 _chainTo,
         bytes calldata _recipientAddress,
         uint256 _amount
     ) external {
-        _burn(_tokenName, msg.sender, _amount);
+        _burn(_tokenSymbol, msg.sender, _amount);
 
         emit Sent(
             Receipt({
                 from: msg.sender,
                 to: _recipientAddress,
-                tokenName: _tokenName,
+                tokenSymbol: _tokenSymbol,
                 amount: _amount,
                 chainFrom: block.chainid,
                 chainTo: _chainTo,
@@ -60,7 +60,7 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
             to := mload(add(unpacked, 20))
         }
 
-        _mint(_receipt.tokenName, to, _receipt.amount);
+        _mint(_receipt.tokenSymbol, to, _receipt.amount);
 
         emit Claimed(_receipt);
     }

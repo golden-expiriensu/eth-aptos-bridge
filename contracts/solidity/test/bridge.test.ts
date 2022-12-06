@@ -45,7 +45,7 @@ describe("Bridge tests", () => {
 
     const sendTx = await bridgeA
       .connect(user1)
-      .send(TOKEN.name, chainB, user2.address, sendAmount);
+      .send(TOKEN.symbol, chainB, user2.address, sendAmount);
 
     expect(await tokenA.balanceOf(user1.address), "1. Send balance U1").eq(0);
     expect(await tokenA.balanceOf(user2.address), "1. Send balance U2").eq(0);
