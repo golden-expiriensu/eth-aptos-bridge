@@ -3,9 +3,9 @@ import { AptosAccount, AptosClient, HexString, MaybeHexString } from 'aptos';
 export class TokenClient extends AptosClient {
     constructor(
       nodeUrl: string,
-      private coinModuleName: string,
-      private coinType: string,
-      private coinModuleAddress: HexString
+      private moduleName: string,
+      public phantomType: string,
+      private moduleAddress: HexString
     ) {
       super(nodeUrl);
     }
@@ -18,8 +18,8 @@ export class TokenClient extends AptosClient {
       initialSupply: bigint | number
     ): Promise<string> {
       const rawTxn = await this.generateTransaction(owner.address(), {
-        function: `${this.coinModuleAddress.hex()}::${this.coinModuleName}::initialize`,
-        type_arguments: [this.coinType],
+        function: `${this.moduleAddress.hex()}::${this.moduleName}::initialize`,
+        type_arguments: [this.phantomType],
         arguments: [name, symbol, decimals, initialSupply],
       });
   
@@ -32,7 +32,7 @@ export class TokenClient extends AptosClient {
     async transfer(from: AptosAccount, to: HexString, amount: number | bigint): Promise<string> {
       const rawTxn = await this.generateTransaction(from.address(), {
         function: "0x1::coin::transfer",
-        type_arguments: [this.coinType],
+        type_arguments: [this.phantomType],
         arguments: [to.hex(), amount],
       });
   
@@ -46,7 +46,7 @@ export class TokenClient extends AptosClient {
       try {
         const resource = await this.getAccountResource(
           accountAddress,
-          `0x1::coin::CoinStore<${this.coinType}>`,
+          `0x1::coin::CoinStore<${this.phantomType}>`,
         );
   
         return parseInt((resource.data as any)["coin"]["value"]);
