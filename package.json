@@ -4,7 +4,11 @@
   "author": "Danil Menkin",
   "description": "A bridge between ethereum and aptos blockchains",
   "workspaces": [
-    "contracts/*"
+    "contracts/*",
+    "backend/*"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "prettier": "^2.8.0"
+  }
 }

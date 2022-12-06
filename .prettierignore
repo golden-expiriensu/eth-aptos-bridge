@@ -1,0 +1,12 @@
+node_modules
+*.md
+*.yaml
+
+artifacts
+cache
+coverage
+typechain
+deployments
+gasReporterOutput.json
+
+*.aptos
