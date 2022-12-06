@@ -16,7 +16,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await deploy(TOKEN.name, {
     contract: "Token",
     from: deployer,
-    args: [TOKEN.name, TOKEN.symbol, TOKEN.initialSupply, deployer, owner],
+    args: [TOKEN.name, TOKEN.symbol, TOKEN.decimals, TOKEN.initialSupply, deployer, owner],
     log: true,
   });
 };
