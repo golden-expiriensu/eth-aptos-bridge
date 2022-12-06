@@ -97,11 +97,11 @@ module platform::Bridge {
         table::add(&mut credits.ledger, user, balance + amount);
     }
 
-    public entry fun is_token_supported<Token>(): bool {
+    public fun is_token_supported<Token>(): bool {
         exists<Credits<Token>>(@platform)
     }
 
-    public entry fun get_credits<Token>(user: address): u64 acquires Credits {
+    public fun get_credits<Token>(user: address): u64 acquires Credits {
         assert!(is_token_supported<Token>(), ETOKEN_IS_NOT_SUPPORTED);
 
         let credits = borrow_global_mut<Credits<Token>>(@platform);
