@@ -17,7 +17,7 @@ describe("Bridge tests", () => {
   let bridgeA: Bridge, bridgeB: Bridge;
   let tokenA: Token, tokenB: Token;
 
-  const sendAmount = ethers.utils.parseEther("1000");
+  const sendAmount = ethers.utils.parseUnits("1000", 6);
 
   beforeEach(async () => {
     const { signer: signerAddress, deployer: deployerAddress } =
