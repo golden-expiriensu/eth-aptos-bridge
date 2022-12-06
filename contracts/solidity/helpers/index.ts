@@ -1,5 +1,5 @@
 import { BigNumber, Signer } from "ethers";
-import { ethers } from "hardhat";
+import * as ethers from "ethers";
 import { Address } from "hardhat-deploy/types";
 
 export type Receipt = {

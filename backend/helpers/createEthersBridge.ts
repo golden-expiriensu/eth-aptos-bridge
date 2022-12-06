@@ -6,7 +6,7 @@ export const createEthersBridgeSync = (wss: string): ethers.Contract => {
 
   const artifactPath =
     "../contracts/solidity/artifacts/contracts/Bridge.sol/Bridge.json";
-  const deploymentPath = "../contracts/solidity/deployments/goerli/Bridge.json";
+  const deploymentPath = "../contracts/solidity/deployments/sepolia/Bridge.json";
 
   if (!existsSync(artifactPath)) {
     throw new Error(

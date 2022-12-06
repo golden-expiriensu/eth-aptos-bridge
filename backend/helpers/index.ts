@@ -1,2 +1,2 @@
 export * from "./createEthersBridge";
-export * from "./signReceipt";
+export * from "../../contracts/solidity/helpers";
