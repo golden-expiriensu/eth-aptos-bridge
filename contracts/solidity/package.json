@@ -6,10 +6,7 @@
     ]
   },
   "scripts": {
-    "formatc": "pnpm prettier --write ./contracts/*.sol && pnpm prettier --write ./contracts/**/*.sol",
-    "formatt": "pnpm prettier --write ./test",
-    "formatd": "pnpm prettier --write ./deploy",
-    "format": "pnpm formatc && pnpm formatt && pnpm formatd",
+    "format": "pnpm prettier --write ./contracts/*.sol && pnpm prettier --write ./contracts/**/*.sol",
     "compile": "pnpm formatc && npx hardhat compile",
     "test": "pnpm formatt && npx hardhat test",
     "sizec": "pnpm compile && npx hardhat size-contracts"

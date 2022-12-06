@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "author": "Danil Menkin",
   "description": "A bridge between ethereum and aptos blockchains",
+  "scripts": {
+    "format": "prettier --write contracts backend && cd contracts/solidity && pnpm format"
+  },
   "workspaces": [
     "contracts/*",
     "backend/*"
   ],
   "license": "MIT",
   "dependencies": {
-    "prettier": "^2.8.0"
+    "prettier": "^2.3.2"
   }
 }
