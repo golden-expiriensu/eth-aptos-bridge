@@ -1,8 +1,8 @@
-import { HexString } from 'aptos';
-import { argv } from 'process';
+import { HexString } from "aptos";
+import { argv } from "process";
 
-import { CustomAptosAccount, TokenClient } from '../../../types';
-import { processTransaction } from '../common';
+import { CustomAptosAccount, TokenClient } from "../../../types";
+import { processTransaction } from "../common";
 
 require("dotenv").config();
 
@@ -15,7 +15,9 @@ async function main(moduleName: string, coinType: string) {
     new HexString(process.env.TOKEN_ADDRESS!)
   );
 
-  await processTransaction(client, () => client.transfer(account, account.address(), BigInt("0xf")));
+  await processTransaction(client, () =>
+    client.transfer(account, account.address(), BigInt("0xf"))
+  );
 }
 
 main(argv[2], argv[3]).catch((e) => console.error(e));

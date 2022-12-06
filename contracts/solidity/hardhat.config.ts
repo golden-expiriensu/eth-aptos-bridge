@@ -1,14 +1,14 @@
-import './tasks';
-import '@nomiclabs/hardhat-ethers';
-import '@nomiclabs/hardhat-etherscan';
-import '@nomiclabs/hardhat-waffle';
-import '@typechain/hardhat';
-import 'hardhat-contract-sizer';
-import 'hardhat-deploy';
-import 'hardhat-gas-reporter';
+import "./tasks";
+import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-etherscan";
+import "@nomiclabs/hardhat-waffle";
+import "@typechain/hardhat";
+import "hardhat-contract-sizer";
+import "hardhat-deploy";
+import "hardhat-gas-reporter";
 
-import * as dotenv from 'dotenv';
-import { HardhatUserConfig } from 'hardhat/config';
+import * as dotenv from "dotenv";
+import { HardhatUserConfig } from "hardhat/config";
 
 dotenv.config();
 
@@ -43,7 +43,7 @@ const config: HardhatUserConfig = {
         process.env.OWNER_PRIVATE_KEY,
         process.env.SIGNER_PRIVATE_KEY,
       ],
-    }
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

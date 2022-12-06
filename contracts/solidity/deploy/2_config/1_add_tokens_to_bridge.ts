@@ -1,9 +1,9 @@
-import { ethers } from 'hardhat';
-import { DeployFunction } from 'hardhat-deploy/types';
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { ethers } from "hardhat";
+import { DeployFunction } from "hardhat-deploy/types";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
 
-import { Bridge } from '../../typechain';
-import { TOKEN } from '../config';
+import { Bridge } from "../../typechain";
+import { TOKEN } from "../config";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts } = hre;

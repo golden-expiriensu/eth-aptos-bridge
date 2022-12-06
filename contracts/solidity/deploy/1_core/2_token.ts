@@ -1,8 +1,8 @@
-import { ethers } from 'hardhat';
-import { DeployFunction } from 'hardhat-deploy/types';
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { ethers } from "hardhat";
+import { DeployFunction } from "hardhat-deploy/types";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
 
-import { TOKEN } from '../config';
+import { TOKEN } from "../config";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const {
@@ -16,7 +16,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await deploy(TOKEN.name, {
     contract: "Token",
     from: deployer,
-    args: [TOKEN.name, TOKEN.symbol, TOKEN.decimals, TOKEN.initialSupply, deployer, owner],
+    args: [
+      TOKEN.name,
+      TOKEN.symbol,
+      TOKEN.decimals,
+      TOKEN.initialSupply,
+      deployer,
+      owner,
+    ],
     log: true,
   });
 };
