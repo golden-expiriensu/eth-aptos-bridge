@@ -8,7 +8,7 @@ import {Roles} from "./base/Roles.sol";
 import {ReceiptVerifier} from "./base/ReceiptVerifier.sol";
 import {Pool} from "./base/Pool.sol";
 
-error InvalidAddressLength(uint);
+error InvalidAddressLength(uint256);
 
 contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     using Counters for Counters.Counter;
@@ -49,8 +49,9 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
     function claim(Receipt calldata _receipt, bytes calldata _signature)
         external
     {
-        if (_receipt.to.length != 20) revert InvalidAddressLength(_receipt.to.length);
-        
+        if (_receipt.to.length != 20)
+            revert InvalidAddressLength(_receipt.to.length);
+
         _useReceipt(_receipt, _signature);
 
         bytes memory unpacked = _receipt.to;
