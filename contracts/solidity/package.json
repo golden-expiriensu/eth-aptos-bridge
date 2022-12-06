@@ -7,9 +7,9 @@
   },
   "scripts": {
     "format": "pnpm prettier --write ./contracts/*.sol && pnpm prettier --write ./contracts/**/*.sol",
-    "compile": "pnpm formatc && npx hardhat compile",
-    "test": "pnpm formatt && npx hardhat test",
-    "sizec": "pnpm compile && npx hardhat size-contracts"
+    "compile": "pnpm format && npx hardhat compile",
+    "test": "npx hardhat test",
+    "sizec": "npx hardhat size-contracts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@0.3.0-beta.13",
