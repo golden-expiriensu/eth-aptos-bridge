@@ -24,20 +24,20 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: {
       hardhat: 0,
-      goerli: "privatekey://" + process.env.DEPLOYER_PRIVATE_KEY,
+      sepolia: "privatekey://" + process.env.DEPLOYER_PRIVATE_KEY,
     },
     owner: {
       hardhat: 1,
-      goerli: "privatekey://" + process.env.OWNER_PRIVATE_KEY,
+      sepolia: "privatekey://" + process.env.OWNER_PRIVATE_KEY,
     },
     signer: {
       hardhat: 2,
-      goerli: "privatekey://" + process.env.SIGNER_PRIVATE_KEY,
+      sepolia: "privatekey://" + process.env.SIGNER_PRIVATE_KEY,
     },
   },
   networks: {
-    goerli: {
-      url: process.env.GOERLI_URL || "",
+    sepolia: {
+      url: process.env.SEPOLIA_URL || "",
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY,
         process.env.OWNER_PRIVATE_KEY,
@@ -51,7 +51,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      goerli: process.env.ETHERSCAN_API_KEY ?? "",
+      sepolia: process.env.ETHERSCAN_API_KEY ?? "",
     },
   },
 };
