@@ -1,2 +1,2 @@
-export * from './customAptosClient';
+export * from './customAptosAccount';
 export * from './tokenClient';
