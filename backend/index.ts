@@ -1,13 +1,13 @@
-import { HexString } from 'aptos';
-import * as ethers from 'ethers';
+import { HexString } from "aptos";
+import * as ethers from "ethers";
 
 import {
   createAptosAccount,
   processTransaction,
-} from '../contracts/move/scripts/tasks/common';
-import { BridgeClient, TokenClient } from '../contracts/move/types';
-import { parseReceipt, signReceipt } from './helpers';
-import { createEthersBridgeSync } from './helpers/createEthersBridge';
+} from "../contracts/move/scripts/tasks/common";
+import { BridgeClient, TokenClient } from "../contracts/move/types";
+import { parseReceipt, signReceipt } from "./helpers";
+import { createEthersBridgeSync } from "./helpers/createEthersBridge";
 
 require("dotenv").config();
 

@@ -1,6 +1,6 @@
-import { AptosAccount, AptosClient, HexString } from 'aptos';
+import { AptosAccount, AptosClient, HexString } from "aptos";
 
-import { TokenClient } from './tokenClient';
+import { TokenClient } from "./tokenClient";
 
 export class BridgeClient extends AptosClient {
   constructor(
