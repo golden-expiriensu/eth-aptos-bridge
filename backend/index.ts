@@ -1,24 +1,45 @@
+import { HexString } from 'aptos';
 import * as ethers from 'ethers';
-import fs from 'fs';
 
-const {parseReceipt, signReceipt} = require('./helpers');
+import {
+  createAptosAccount,
+  processTransaction,
+} from '../contracts/move/scripts/tasks/common';
+import { BridgeClient, TokenClient } from '../contracts/move/types';
+import { parseReceipt, signReceipt } from './helpers';
+import { createEthersBridgeSync } from './helpers/createEthersBridge';
 
 require("dotenv").config();
 
-const wsProvider = new ethers.providers.WebSocketProvider(
-    `wss://goerli.infura.io/ws/v3/${process.env.INFURA_API_KEY}`,
+const ethBridge = createEthersBridgeSync(process.env.ETH_WS!);
+const ethSigner = new ethers.Wallet(process.env.ETH_SIGNER_PRIVATE_KEY!);
+
+const aptosBridge = new BridgeClient(
+  process.env.APTOS_URL!,
+  "Bridge",
+  new HexString(process.env.APTOS_BRIDGE_ADDRESS!)
 );
+const aptosToken = new TokenClient(
+  process.env.APTOS_URL!,
+  "PlatformToken",
+  `${process.env.APTOS_TOKEN_ADDRESS}::SupportedTokens::USDT`,
+  new HexString(process.env.APTOS_TOKEN_ADDRESS!)
+);
+const aptosSigner = createAptosAccount(process.env.APTOS_SIGNER_PRIVATE_KEY!);
 
-const bridgeAbi = JSON.parse(fs.readFileSync('bridge.json').toString());
+console.log(`Starting to listen events at ${ethBridge.address} ...`);
 
-const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS!, bridgeAbi, wsProvider);
-const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY!);
+ethBridge.on("Sent", async (receipt: any) => {
+  console.log('Catched "Sent" event:', parseReceipt(receipt));
 
-console.log('Starting to listen events...');
+  console.log(`Signed event: ${await signReceipt(receipt, ethSigner)}`);
 
-contract.on("Sent", (receipt) => {
-  signReceipt(ethers, receipt, signer).then((signed: string) => {
-    console.log('Catched "Sent" event:', parseReceipt(receipt));
-    console.log('\nSigned payload:', signed);
-  });
+  await processTransaction(aptosBridge, () =>
+    aptosBridge.creditUser(
+      aptosSigner,
+      aptosToken,
+      new HexString(receipt.to),
+      ethers.BigNumber.from(receipt.amount).mul(1e3).toString()
+    )
+  );
 });

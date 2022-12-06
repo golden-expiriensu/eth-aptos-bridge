@@ -1,6 +1,6 @@
-import { AptosAccount, AptosClient, HexString } from "aptos";
+import { AptosAccount, AptosClient, HexString } from 'aptos';
 
-import { TokenClient } from "./tokenClient";
+import { TokenClient } from './tokenClient';
 
 export class BridgeClient extends AptosClient {
   constructor(
@@ -50,12 +50,12 @@ export class BridgeClient extends AptosClient {
     owner: AptosAccount,
     token: TokenClient,
     user: HexString,
-    amount: bigint
+    amount: bigint | string
   ): Promise<string> {
     const rawTxn = await this.generateTransaction(owner.address(), {
       function: `${this.moduleAddress.hex()}::${this.moduleName}::credit_user`,
       type_arguments: [token.phantomType],
-      arguments: [user, amount],
+      arguments: [user.hex(), amount],
     });
 
     const bcsTxn = await this.signTransaction(owner, rawTxn);
