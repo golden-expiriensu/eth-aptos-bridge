@@ -1,7 +1,6 @@
 import { HexString } from "aptos";
+import { CustomAptosAccount, TokenClient } from "clients";
 import { argv } from "process";
-
-import { CustomAptosAccount, TokenClient } from "../../../clients";
 
 require("dotenv").config();
 
