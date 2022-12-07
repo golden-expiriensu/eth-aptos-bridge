@@ -63,4 +63,16 @@ describe("Bridge tests", () => {
       sendAmount
     );
   });
+
+  it("2. Should allow to send tokens to non 20-byte addresses", async () => {
+    const sendTx = await bridgeA
+      .connect(user1)
+      .send(TOKEN.symbol, chainB, ethers.constants.MaxUint256, sendAmount);
+
+    const receipt = (await sendTx.wait()).events!.find(
+      (e) => e.event === "Sent"
+    )!.args![0];
+    
+    expect(receipt.to, "2. Receipt.to").eq(ethers.constants.MaxUint256);
+  });
 });
