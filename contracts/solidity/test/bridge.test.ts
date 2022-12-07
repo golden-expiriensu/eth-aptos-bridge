@@ -72,7 +72,7 @@ describe("Bridge tests", () => {
     const receipt = (await sendTx.wait()).events!.find(
       (e) => e.event === "Sent"
     )!.args![0];
-    
+
     expect(receipt.to, "2. Receipt.to").eq(ethers.constants.MaxUint256);
   });
 });
