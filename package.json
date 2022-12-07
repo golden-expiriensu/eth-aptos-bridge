@@ -12,6 +12,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "prettier": "^2.3.2"
+    "prettier": "^2.8.0"
   }
 }
