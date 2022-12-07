@@ -1,7 +1,7 @@
 import {
-    BridgeClient,
-    CustomAptosAccount,
-    TokenClient,
+  BridgeClient,
+  CustomAptosAccount,
+  TokenClient,
 } from "@contracts/move/clients";
 import { processTransaction } from "@contracts/move/scripts/common";
 import { SentEvent } from "@contracts/solidity/typechain/Bridge";
@@ -33,9 +33,7 @@ export class AptosService {
     );
   }
 
-  handleEvmReceipt(
-    payload: SentEvent["args"]["receipt"]
-  ): Promise<void> {
+  handleEvmReceipt(payload: SentEvent["args"]["receipt"]): Promise<void> {
     const handler = this.bridgeClient.creditUser(
       this.ownerAccount,
       this.tokenClient,
