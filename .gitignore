@@ -12,7 +12,7 @@ artifacts
 
 # Move
 .aptos
-aptos.*
+aptos.exe
 build
 
 # Nest
