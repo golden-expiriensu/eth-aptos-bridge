@@ -1,4 +1,4 @@
-import { BigNumber, Signer } from 'ethers'
+import { Signer } from 'ethers'
 import * as ethers from 'ethers'
 import { Address } from 'hardhat-deploy/types'
 
@@ -6,10 +6,10 @@ export type Receipt = {
   from: Address;
   to: Address;
   tokenSymbol: string;
-  amount: BigNumber;
-  chainFrom: BigNumber;
-  chainTo: BigNumber;
-  nonce: BigNumber;
+  amount: string;
+  chainFrom: number;
+  chainTo: number;
+  nonce: string;
 };
 
 export const parseReceipt = (receipt: any): Receipt => {
@@ -17,10 +17,10 @@ export const parseReceipt = (receipt: any): Receipt => {
     from: receipt.from,
     to: receipt.to,
     tokenSymbol: receipt.tokenSymbol,
-    amount: BigNumber.from(receipt.amount),
-    chainFrom: BigNumber.from(receipt.chainFrom),
-    chainTo: BigNumber.from(receipt.chainTo),
-    nonce: BigNumber.from(receipt.nonce),
+    amount: receipt.amount,
+    chainFrom: receipt.chainFrom,
+    chainTo: receipt.chainTo,
+    nonce: receipt.nonce,
   };
 };
 
