@@ -1,8 +1,8 @@
-import { Controller, Get, Param } from "@nestjs/common";
-import { HexString } from "aptos";
+import { Controller, Get, Param } from '@nestjs/common'
+import { HexString } from 'aptos'
 
-import { DBAccessService } from "./db-access.service";
-import { Receipt } from "./entities";
+import { DBAccessService } from './db-access.service'
+import { Receipt } from './entities'
 
 @Controller("receipts")
 export class DbAccessController {
@@ -10,6 +10,6 @@ export class DbAccessController {
 
   @Get("/:user")
   getReceipts(@Param("user") user: string): Promise<Receipt[]> {
-    return this.dbAccessSevice.getReceipts(new HexString(user));
+    return this.dbAccessSevice.getReceiptsByRecipient(new HexString(user));
   }
 }

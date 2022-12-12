@@ -1,10 +1,11 @@
-import { SentEvent } from "@contracts/solidity/typechain/Bridge";
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { HexString } from "aptos";
-import { FindOptionsWhere, Repository, UpdateResult } from "typeorm";
+import { parseReceipt } from '@contracts/solidity/helpers'
+import { SentEvent } from '@contracts/solidity/typechain/Bridge'
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { HexString } from 'aptos'
+import { FindOptionsWhere, Repository, UpdateResult } from 'typeorm'
 
-import { Receipt } from "./entities";
+import { Receipt } from './entities'
 
 @Injectable()
 export class DBAccessService {
@@ -13,20 +14,24 @@ export class DBAccessService {
     private readonly userRepository: Repository<Receipt>
   ) {}
 
-  getReceipts(recipient: HexString): Promise<Receipt[]> {
+  getReceiptsById(id: string): Promise<Receipt> {
+    return this.userRepository.findOneBy({ id });
+  }
+
+  getReceiptsByRecipient(recipient: HexString): Promise<Receipt[]> {
     return this.userRepository.findBy({ to: recipient.hex() });
   }
 
   createReceipt(receipt: SentEvent["args"]["receipt"]): Promise<Receipt> {
-    const userRecord = this.userRepository.create({
-      from: receipt.from,
-      to: receipt.to,
-      tokenSymbol: receipt.tokenSymbol,
-      amount: receipt.amount.toString(),
-      chainFrom: receipt.chainFrom.toNumber(),
-      chainTo: receipt.chainTo.toNumber(),
-      nonce: receipt.nonce.toString(),
-    });
+    const userRecord = this.userRepository.create(parseReceipt(receipt));
+
+    return this.userRepository.save(userRecord);
+  }
+
+  createReceipts(receipts: SentEvent["args"]["receipt"][]): Promise<Receipt[]> {
+    const userRecord = this.userRepository.create(
+      receipts.map((r) => parseReceipt(r))
+    );
 
     return this.userRepository.save(userRecord);
   }
