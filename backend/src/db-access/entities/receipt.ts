@@ -1,14 +1,16 @@
-import { HexString } from 'aptos'
-import { BigNumber } from 'ethers'
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { BigNumber } from "ethers";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("receipts")
 export class Receipt {
-  @PrimaryColumn("bytea")
-  to: HexString;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-  @Column("bytea")
-  from: HexString;
+  @Column("varchar", { length: 66 })
+  from: string;
+
+  @Column("varchar", { length: 66 })
+  to: string;
 
   @Column("varchar", { length: 16 })
   tokenSymbol: string;
@@ -25,6 +27,6 @@ export class Receipt {
   @Column("numeric", { precision: 78, scale: 0 })
   nonce: BigNumber;
 
-  @Column("boolean")
-  isFullfiled: boolean;
+  @Column("varchar", { length: 66, nullable: true })
+  claimTx: string;
 }

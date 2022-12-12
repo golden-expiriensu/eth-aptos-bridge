@@ -15,6 +15,8 @@ export const processTransaction = async (
 
     await client.waitForTransaction(txHash, { checkSuccess: true });
     console.log("Status: Success");
+
+    return txHash;
   } catch (err) {
     console.error("Status: Error");
     console.error(err);

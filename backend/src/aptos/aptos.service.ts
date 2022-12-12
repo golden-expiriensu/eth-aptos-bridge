@@ -33,7 +33,7 @@ export class AptosService {
     );
   }
 
-  handleEvmReceipt(payload: SentEvent["args"]["receipt"]): Promise<void> {
+  handleEvmReceipt(payload: SentEvent["args"]["receipt"]): Promise<string> {
     const handler = this.bridgeClient.creditUser(
       this.ownerAccount,
       this.tokenClient,
