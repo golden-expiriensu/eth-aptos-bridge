@@ -1,11 +1,11 @@
-import { signReceipt } from "@contracts/solidity/helpers";
-import { Bridge, SentEvent } from "@contracts/solidity/typechain/Bridge";
-import { Injectable } from "@nestjs/common";
-import { Wallet } from "ethers";
-import { AptosService } from "src/aptos/aptos.service";
-import { DBAccessService } from "src/db-access/db-access.service";
+import { parseReceipt, signReceipt } from '@contracts/solidity/helpers'
+import { Bridge, SentEvent } from '@contracts/solidity/typechain/Bridge'
+import { Injectable } from '@nestjs/common'
+import { Wallet } from 'ethers'
+import { AptosService } from 'src/aptos/aptos.service'
+import { DBAccessService } from 'src/db-access/db-access.service'
 
-import { createEthersBridgeSync } from "./helpers";
+import { createEthersBridgeSync } from './helpers'
 
 @Injectable()
 export class EthService {
@@ -23,8 +23,10 @@ export class EthService {
     );
   }
 
-  signReceipt(receipt: SentEvent["args"]["receipt"]): Promise<string> {
-    return signReceipt(receipt, this.signer);
+  async signReceipt(receiptId: string): Promise<string> {
+    const receipt = await this.dbAccessSevice.getReceiptsById(receiptId);
+    
+    return signReceipt(parseReceipt(receipt), this.signer);
   }
 
   handleSentEvent(payload: SentEvent["args"]["receipt"]): Promise<string> {
