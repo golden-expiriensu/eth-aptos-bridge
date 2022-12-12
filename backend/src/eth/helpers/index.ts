@@ -1,1 +1,1 @@
-export * from "./createEthersBridge";
+export * from './createEthersBridge'

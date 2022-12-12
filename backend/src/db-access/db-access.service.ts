@@ -11,35 +11,30 @@ import { Receipt } from './entities'
 export class DBAccessService {
   constructor(
     @InjectRepository(Receipt)
-    private readonly userRepository: Repository<Receipt>
+    private readonly userRepository: Repository<Receipt>,
   ) {}
 
   getReceiptsById(id: string): Promise<Receipt> {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOneBy({ id })
   }
 
   getReceiptsByRecipient(recipient: HexString): Promise<Receipt[]> {
-    return this.userRepository.findBy({ to: recipient.hex() });
+    return this.userRepository.findBy({ to: recipient.hex() })
   }
 
-  createReceipt(receipt: SentEvent["args"]["receipt"]): Promise<Receipt> {
-    const userRecord = this.userRepository.create(parseReceipt(receipt));
+  createReceipt(receipt: SentEvent['args']['receipt']): Promise<Receipt> {
+    const userRecord = this.userRepository.create(parseReceipt(receipt))
 
-    return this.userRepository.save(userRecord);
+    return this.userRepository.save(userRecord)
   }
 
-  createReceipts(receipts: SentEvent["args"]["receipt"][]): Promise<Receipt[]> {
-    const userRecord = this.userRepository.create(
-      receipts.map((r) => parseReceipt(r))
-    );
+  createReceipts(receipts: SentEvent['args']['receipt'][]): Promise<Receipt[]> {
+    const userRecord = this.userRepository.create(receipts.map((r) => parseReceipt(r)))
 
-    return this.userRepository.save(userRecord);
+    return this.userRepository.save(userRecord)
   }
 
-  fullfillReceipts(
-    where: FindOptionsWhere<Receipt>,
-    txHash: HexString
-  ): Promise<UpdateResult> {
-    return this.userRepository.update(where, { claimTx: txHash.hex() });
+  fullfillReceipts(where: FindOptionsWhere<Receipt>, txHash: HexString): Promise<UpdateResult> {
+    return this.userRepository.update(where, { claimTx: txHash.hex() })
   }
 }
