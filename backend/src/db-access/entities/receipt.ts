@@ -1,6 +1,6 @@
-import { HexString } from "aptos";
-import { BigNumber } from "ethers";
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { HexString } from 'aptos'
+import { BigNumber } from 'ethers'
+import { Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity("receipts")
 export class Receipt {
@@ -16,15 +16,15 @@ export class Receipt {
   @Column("numeric", { precision: 78, scale: 0 })
   amount: BigNumber;
 
-  @Column("bytea")
-  chainFrom: HexString;
+  @Column("numeric", { precision: 16, scale: 0 })
+  chainFrom: number;
 
-  @Column("bytea")
-  chainTo: HexString;
+  @Column("numeric", { precision: 16, scale: 0 })
+  chainTo: number;
 
   @Column("numeric", { precision: 78, scale: 0 })
   nonce: BigNumber;
 
-  @Column('boolean')
+  @Column("boolean")
   isFullfiled: boolean;
 }

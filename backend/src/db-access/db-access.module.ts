@@ -1,10 +1,12 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { DbAccessController } from "./db-access.controller";
 import { DBAccessService } from "./db-access.service";
 import { Receipt } from "./entities";
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -21,7 +23,7 @@ import { Receipt } from "./entities";
     TypeOrmModule.forFeature([Receipt]),
   ],
   providers: [DBAccessService],
-  controllers: [],
+  controllers: [DbAccessController],
   exports: [DBAccessService],
 })
 export class DBAccessModule {}
