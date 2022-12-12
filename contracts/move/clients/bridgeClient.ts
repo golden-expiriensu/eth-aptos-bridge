@@ -5,8 +5,8 @@ import { TokenClient } from "./tokenClient";
 export class BridgeClient extends AptosClient {
   constructor(
     nodeUrl: string,
-    private moduleName: string,
-    private moduleAddress: HexString
+    public moduleName: string,
+    public moduleAddress: HexString
   ) {
     super(nodeUrl);
   }
