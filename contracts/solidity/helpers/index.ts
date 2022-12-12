@@ -1,8 +1,6 @@
-import { BigNumber, Signer } from "ethers";
-import * as ethers from "ethers";
-import { Address } from "hardhat-deploy/types";
-
-import { SentEvent } from "../typechain/Bridge";
+import { BigNumber, Signer } from 'ethers'
+import * as ethers from 'ethers'
+import { Address } from 'hardhat-deploy/types'
 
 export type Receipt = {
   from: Address;
@@ -14,22 +12,20 @@ export type Receipt = {
   nonce: BigNumber;
 };
 
-export const parseReceipt = (
-  receipt: SentEvent["args"]["receipt"]
-): Receipt => {
+export const parseReceipt = (receipt: any): Receipt => {
   return {
     from: receipt.from,
     to: receipt.to,
     tokenSymbol: receipt.tokenSymbol,
-    amount: receipt.amount,
-    chainFrom: receipt.chainFrom,
-    chainTo: receipt.chainTo,
-    nonce: receipt.nonce,
+    amount: BigNumber.from(receipt.amount),
+    chainFrom: BigNumber.from(receipt.chainFrom),
+    chainTo: BigNumber.from(receipt.chainTo),
+    nonce: BigNumber.from(receipt.nonce),
   };
 };
 
 export const signReceipt = async (
-  receipt: SentEvent["args"]["receipt"],
+  receipt: Receipt,
   signer: Signer
 ): Promise<string> => {
   const message = ethers.utils.solidityPack(
