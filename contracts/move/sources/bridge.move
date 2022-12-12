@@ -6,6 +6,7 @@ module platform::Bridge {
         emit_event,
     };
     use std::signer::address_of;
+    use std::string::String;
     use std::table::{Self, Table};
     use platform::PlatformToken;
 
@@ -25,8 +26,10 @@ module platform::Bridge {
     }
 
     struct SendEvent has store, drop {
+        from: address,
         to: address,
         to_chain: u64,
+        token_symbol: String,
         amount: u64
     }
 
@@ -66,7 +69,13 @@ module platform::Bridge {
         
         emit_event(
             &mut borrow_global_mut<Config>(@platform).swap_event_handle,
-            SendEvent { to, to_chain, amount }
+            SendEvent {
+                from: address_of(from),
+                to,
+                to_chain,
+                token_symbol: coin::symbol<PlatformToken>(),
+                amount
+            }
         );
     }
 
