@@ -1,6 +1,6 @@
-import { Signer } from 'ethers'
-import * as ethers from 'ethers'
-import { Address } from 'hardhat-deploy/types'
+import { Signer } from "ethers";
+import * as ethers from "ethers";
+import { Address } from "hardhat-deploy/types";
 
 export type Receipt = {
   from: Address;

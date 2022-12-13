@@ -22,7 +22,7 @@ export class DBAccessService {
     return this.userRepository.findBy({ to: recipient.hex().toLowerCase() })
   }
 
-  createReceipt(receipt: (MininalReceipt | SentEvent['args']['receipt'])): Promise<Receipt> {
+  createReceipt(receipt: MininalReceipt | SentEvent['args']['receipt']): Promise<Receipt> {
     const userRecord = this.userRepository.create(parseReceipt(receipt))
 
     return this.userRepository.save(userRecord)
