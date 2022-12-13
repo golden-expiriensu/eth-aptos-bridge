@@ -64,7 +64,7 @@ export class AptosService {
       // TODO: move to bridge client
       new HexString(this.bridgeClient.moduleAddress.hex()),
       `${this.bridgeClient.moduleAddress.hex()}::${this.bridgeClient.moduleName}::Config`,
-      'swap_event_handle',
+      'send_event_handle',
       {
         start: this.eventsQueryStart,
       },
