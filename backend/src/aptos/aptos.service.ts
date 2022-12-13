@@ -53,14 +53,14 @@ export class AptosService {
   }
 
   private async startFetchingEvents(): Promise<void> {
-    console.log(`Fetched ${(await this.fetchNewEventsAndWriteNewOnesToDB()).length} events...`)
+    console.log(`Fetched ${(await this.fetchSentEvents()).length} events...`)
     await new Promise((r) => setTimeout(r, 5000))
 
     await this.startFetchingEvents()
   }
 
-  private async fetchNewEventsAndWriteNewOnesToDB(): Promise<Receipt[]> {
-    const events = await this.bridgeClient.getEventsByEventHandle(
+  private async fetchSentEvents(): Promise<Receipt[]> {
+    const sentEvents = await this.bridgeClient.getEventsByEventHandle(
       // TODO: move to bridge client
       new HexString(this.bridgeClient.moduleAddress.hex()),
       `${this.bridgeClient.moduleAddress.hex()}::${this.bridgeClient.moduleName}::Config`,
@@ -70,14 +70,14 @@ export class AptosService {
       },
     )
 
-    if (events.length === 0) return []
+    if (sentEvents.length === 0) return []
 
-    const last = events.length - 1
-    this.eventsQueryStart = Number(events[last].sequence_number) + 1
+    const last = sentEvents.length - 1
+    this.eventsQueryStart = Number(sentEvents[last].sequence_number) + 1
 
-    const chainId = (events as any).__headers['x-aptos-chain-id']
+    const chainId = (sentEvents as any).__headers['x-aptos-chain-id']
 
-    const sentEvents = events.map((e) => {
+    const sentReceipts = sentEvents.map((e) => {
       return {
         from: e.data.from,
         to: e.data.to,
@@ -89,6 +89,6 @@ export class AptosService {
       }
     })
 
-    return this.dbAccessSevice.createReceipts(sentEvents)
+    return this.dbAccessSevice.createReceipts(sentReceipts)
   }
 }
