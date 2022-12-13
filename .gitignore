@@ -17,6 +17,8 @@ build
 
 # Nest
 
+certs
+
 # compiled output
 dist
 
