@@ -27,6 +27,6 @@ export class Receipt {
   @Column('numeric', { precision: 78, scale: 0 })
   nonce: BigNumber
 
-  @Column('varchar', { length: 66, nullable: true })
-  claimTx: string
+  @Column('boolean')
+  isFullfilled: boolean
 }

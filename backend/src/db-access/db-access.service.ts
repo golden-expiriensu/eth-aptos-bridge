@@ -34,7 +34,7 @@ export class DBAccessService {
     return this.userRepository.save(userRecord)
   }
 
-  fullfillReceipts(where: FindOptionsWhere<Receipt>, txHash: HexString): Promise<UpdateResult> {
-    return this.userRepository.update(where, { claimTx: txHash.hex() })
+  fullfillReceipts(where: FindOptionsWhere<Receipt>): Promise<UpdateResult> {
+    return this.userRepository.update({ ...where, isFullfilled: false }, { isFullfilled: true })
   }
 }

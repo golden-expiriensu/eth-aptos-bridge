@@ -1,9 +1,10 @@
 import { parseReceipt, signReceipt } from '@contracts/solidity/helpers'
-import { Bridge, SentEvent } from '@contracts/solidity/typechain/Bridge'
+import { Bridge, ClaimedEvent, SentEvent } from '@contracts/solidity/typechain/Bridge'
 import { Injectable } from '@nestjs/common'
 import { Wallet } from 'ethers'
 import { AptosService } from 'src/aptos/aptos.service'
 import { DBAccessService } from 'src/db-access/db-access.service'
+import { UpdateResult } from 'typeorm'
 
 import { createEthersBridgeSync } from './helpers'
 
@@ -16,6 +17,7 @@ export class EthService {
     const bridge: Bridge = createEthersBridgeSync(process.env.ETH_WS!)
 
     bridge.on(bridge.filters.Sent(), (payload) => this.handleSentEvent(payload))
+    bridge.on(bridge.filters.Claimed(), (payload) => this.handleClaimEvent(payload))
   }
 
   async signReceipt(receiptId: string): Promise<string> {
@@ -30,5 +32,9 @@ export class EthService {
     if (this.aptosService.isAptosAddress(payload.to) && this.aptosService.isAptosChainId(payload.chainTo)) {
       return this.aptosService.handleEvmReceipt(payload)
     }
+  }
+
+  handleClaimEvent(payload: ClaimedEvent['args']['receipt']): Promise<UpdateResult> {
+    return this.dbAccessSevice.fullfillReceipts({ to: payload.to })
   }
 }

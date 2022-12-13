@@ -9,7 +9,8 @@ import { Receipt } from 'src/db-access/entities'
 
 @Injectable()
 export class AptosService {
-  private eventsQueryStart: number = 0
+  private sentEventsNonce: number = 0
+  private claimEventsNonce: number = 0
 
   private readonly bridgeClient: BridgeClient
   private readonly tokenClient: TokenClient
@@ -53,31 +54,33 @@ export class AptosService {
   }
 
   private async startFetchingEvents(): Promise<void> {
-    console.log(`Fetched ${(await this.fetchSentEvents()).length} events...`)
+    console.log(`Fetched ${(await this.fetchSentEvents()).length} sent events...`)
+    console.log(`Fetched ${await this.fetchClaimEvents()} claim events...`)
+
     await new Promise((r) => setTimeout(r, 5000))
 
     await this.startFetchingEvents()
   }
 
   private async fetchSentEvents(): Promise<Receipt[]> {
-    const sentEvents = await this.bridgeClient.getEventsByEventHandle(
+    const events = await this.bridgeClient.getEventsByEventHandle(
       // TODO: move to bridge client
       new HexString(this.bridgeClient.moduleAddress.hex()),
       `${this.bridgeClient.moduleAddress.hex()}::${this.bridgeClient.moduleName}::Config`,
       'send_event_handle',
       {
-        start: this.eventsQueryStart,
+        start: this.sentEventsNonce,
       },
     )
 
-    if (sentEvents.length === 0) return []
+    if (events.length === 0) return []
 
-    const last = sentEvents.length - 1
-    this.eventsQueryStart = Number(sentEvents[last].sequence_number) + 1
+    const last = events.length - 1
+    this.sentEventsNonce = Number(events[last].sequence_number) + 1
 
-    const chainId = (sentEvents as any).__headers['x-aptos-chain-id']
+    const chainId = (events as any).__headers['x-aptos-chain-id']
 
-    const sentReceipts = sentEvents.map((e) => {
+    const receipts = events.map((e) => {
       return {
         from: e.data.from,
         to: e.data.to,
@@ -89,6 +92,29 @@ export class AptosService {
       }
     })
 
-    return this.dbAccessSevice.createReceipts(sentReceipts)
+    return this.dbAccessSevice.createReceipts(receipts)
+  }
+
+  private async fetchClaimEvents(): Promise<number> {
+    const events = await this.bridgeClient.getEventsByEventHandle(
+      // TODO: move to bridge client
+      new HexString(this.bridgeClient.moduleAddress.hex()),
+      `${this.bridgeClient.moduleAddress.hex()}::${this.bridgeClient.moduleName}::Config`,
+      'claim_event_handle',
+      {
+        start: this.claimEventsNonce,
+      },
+    )
+
+    if (events.length === 0) return 0
+
+    const last = events.length - 1
+    this.claimEventsNonce = Number(events[last].sequence_number) + 1
+
+    for (const event of events) {
+      this.dbAccessSevice.fullfillReceipts({ to: event.data.to })
+    }
+
+    return events.length
   }
 }
