@@ -75,18 +75,18 @@ export class AptosService {
     const last = events.length - 1
     this.eventsQueryStart = Number(events[last].sequence_number) + 1
 
-    const chainId = BigNumber.from((events as any).__headers['x-aptos-chain-id'])
+    const chainId = (events as any).__headers['x-aptos-chain-id']
 
     const sentEvents = events.map((e) => {
       return {
         from: e.data.from,
         to: e.data.to,
         tokenSymbol: e.data.token_symbol,
-        amount: BigNumber.from(e.data.amount),
+        amount: e.data.amount,
         chainFrom: chainId,
-        chainTo: BigNumber.from(e.data.to_chain),
-        nonce: BigNumber.from(e.sequence_number),
-      } as SentEvent['args']['receipt']
+        chainTo: e.data.to_chain,
+        nonce: e.sequence_number,
+      }
     })
 
     return this.dbAccessSevice.createReceipts(sentEvents)
