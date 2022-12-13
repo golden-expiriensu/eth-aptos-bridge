@@ -19,13 +19,13 @@ export class AptosService {
     this.bridgeClient = new BridgeClient(
       process.env.APTOS_ENDPOINT!,
       'Bridge',
-      new HexString(process.env.APTOS_BRIDGE_ADDRESS!),
+      new HexString(process.env.APTOS_PLATFORM!),
     )
     this.tokenClient = new TokenClient(
       process.env.APTOS_ENDPOINT!,
       'PlatformToken',
-      `${process.env.APTOS_TOKEN_ADDRESS!}::SupportedTokens::USDT`, // TODO: multiple token support
-      new HexString(process.env.APTOS_TOKEN_ADDRESS!),
+      `${process.env.APTOS_PLATFORM!}::SupportedTokens::USDT`, // TODO: multiple token support
+      new HexString(process.env.APTOS_PLATFORM!),
     )
 
     this.ownerAccount = new CustomAptosAccount(process.env.APTOS_SIGNER_PRIVATE_KEY!)
