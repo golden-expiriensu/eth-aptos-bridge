@@ -27,6 +27,6 @@ export class Receipt {
   @Column('numeric', { precision: 78, scale: 0 })
   nonce: BigNumber
 
-  @Column('boolean')
+  @Column('boolean', { nullable: true })
   isFullfilled: boolean
 }
