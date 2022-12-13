@@ -12,7 +12,7 @@ abstract contract ReceiptVerifier is Roles {
     using ECDSA for bytes32;
 
     struct Receipt {
-        address from;
+        bytes from;
         bytes to;
         string tokenSymbol;
         uint256 amount;

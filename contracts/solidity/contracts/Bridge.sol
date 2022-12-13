@@ -33,7 +33,7 @@ contract Bridge is OwnableImmutable, Roles, ReceiptVerifier, Pool {
 
         emit Sent(
             Receipt({
-                from: msg.sender,
+                from: abi.encodePacked(msg.sender),
                 to: _recipientAddress,
                 tokenSymbol: _tokenSymbol,
                 amount: _amount,
