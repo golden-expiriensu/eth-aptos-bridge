@@ -10,3 +10,5 @@ deployments
 gasReporterOutput.json
 
 *.aptos
+
+dist
