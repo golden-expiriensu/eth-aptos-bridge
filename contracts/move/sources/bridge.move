@@ -22,13 +22,20 @@ module platform::Bridge {
     struct Config has key {
         feeE12: u64,
         treasure: address,
-        swap_event_handle: EventHandle<SendEvent>
+        send_event_handle: EventHandle<SendEvent>,
+        claim_event_handle: EventHandle<ClaimEvent>
     }
 
     struct SendEvent has store, drop {
         from: address,
         to: address,
         to_chain: u64,
+        token_symbol: String,
+        amount: u64
+    }
+
+    struct ClaimEvent has store, drop {
+        claimee: address,
         token_symbol: String,
         amount: u64
     }
@@ -52,7 +59,8 @@ module platform::Bridge {
         move_to(account, Config {
             feeE12,
             treasure,
-            swap_event_handle: new_event_handle<SendEvent>(account)
+            send_event_handle: new_event_handle<SendEvent>(account),
+            claim_event_handle: new_event_handle<ClaimEvent>(account)
         });
         move_to(account, CreditCapability {});
     }
@@ -64,22 +72,22 @@ module platform::Bridge {
         move_to(account, Credits<Token> { ledger: table::new() });
     }
 
-    public entry fun send<PlatformToken>(from: &signer, to: address, to_chain: u64, amount: u64) acquires Config {
-        PlatformToken::burn<PlatformToken>(address_of(from), amount);
+    public entry fun send<Token>(from: &signer, to: address, to_chain: u64, amount: u64) acquires Config {
+        PlatformToken::burn<Token>(address_of(from), amount);
         
         emit_event(
-            &mut borrow_global_mut<Config>(@platform).swap_event_handle,
+            &mut borrow_global_mut<Config>(@platform).send_event_handle,
             SendEvent {
                 from: address_of(from),
                 to,
                 to_chain,
-                token_symbol: coin::symbol<PlatformToken>(),
+                token_symbol: coin::symbol<Token>(),
                 amount
             }
         );
     }
 
-    public entry fun claim<Token>(account: &signer) acquires Credits {
+    public entry fun claim<Token>(account: &signer) acquires Credits, Config {
         assert!(get_credits<Token>(address_of(account)) > 0, ENOTHING_TO_CLAIM);
 
         if (!coin::is_account_registered<Token>(address_of(account))) {
@@ -90,6 +98,15 @@ module platform::Bridge {
 
         let debt = table::remove(&mut credits.ledger, address_of(account));
         PlatformToken::mint<Token>(address_of(account), debt);
+
+        emit_event(
+            &mut borrow_global_mut<Config>(@platform).claim_event_handle,
+            ClaimEvent {
+                claimee: address_of(account),
+                token_symbol: coin::symbol<Token>(),
+                amount: debt
+            }
+        );
     }
 
     public entry fun credit_user<Token>(creditor: &signer, user: address, amount: u64) acquires Credits {
@@ -124,6 +141,6 @@ module platform::Bridge {
 
     #[test_only]
     public fun get_send_event_counter(): u64 acquires Config {
-        event_counter<SendEvent>(&borrow_global<Config>(@platform).swap_event_handle)
+        event_counter<SendEvent>(&borrow_global<Config>(@platform).send_event_handle)
     }
 }
