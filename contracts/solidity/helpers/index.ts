@@ -1,10 +1,9 @@
 import { Signer } from 'ethers'
 import * as ethers from 'ethers'
-import { Address } from 'hardhat-deploy/types'
 
 export type Receipt = {
-  from: Address;
-  to: Address;
+  from: string;
+  to: string;
   tokenSymbol: string;
   amount: string;
   chainFrom: number;
@@ -28,10 +27,11 @@ export const signReceipt = async (
   receipt: Receipt,
   signer: Signer
 ): Promise<string> => {
+  console.log(receipt.from)
   const message = ethers.utils.solidityPack(
     [
-      "address",
-      "address",
+      "bytes",
+      "bytes",
       "string",
       "uint256",
       "uint256",
