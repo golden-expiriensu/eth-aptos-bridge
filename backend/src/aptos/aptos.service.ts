@@ -117,7 +117,7 @@ export class AptosService {
 
     return events.length
   }
-  
+
   private padLeftZeros64(address: string): string {
     const rawAddress = address.substring(2)
     const zerosCount = 64 - rawAddress.length

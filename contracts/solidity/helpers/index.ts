@@ -1,5 +1,5 @@
-import { Signer } from 'ethers'
-import * as ethers from 'ethers'
+import { Signer } from "ethers";
+import * as ethers from "ethers";
 
 export type Receipt = {
   from: string;
@@ -27,17 +27,9 @@ export const signReceipt = async (
   receipt: Receipt,
   signer: Signer
 ): Promise<string> => {
-  console.log(receipt.from)
+  console.log(receipt.from);
   const message = ethers.utils.solidityPack(
-    [
-      "bytes",
-      "bytes",
-      "string",
-      "uint256",
-      "uint256",
-      "uint256",
-      "uint256",
-    ],
+    ["bytes", "bytes", "string", "uint256", "uint256", "uint256", "uint256"],
     [
       receipt.from,
       receipt.to,
