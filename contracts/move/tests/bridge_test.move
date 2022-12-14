@@ -126,6 +126,24 @@ module platform::BridgeTests {
         assert!(coin::balance<USDT>(user_addr) == amount, 6);
     }
 
+    #[test(user_addr=@0xA115E)]
+    #[expected_failure(abort_code=5)]
+    fun should_forbid_to_claim_twice(user_addr: address) {
+        let creditor = initialize_modules();
+        let user_acc = &create_account_for_test(user_addr);
+
+        let amount = 0xfffffffffff;
+
+        Bridge::credit_user<USDT>(&creditor, user_addr, amount);
+
+        Bridge::claim<USDT>(user_acc);
+
+        assert!(coin::balance<USDT>(user_addr) == amount, 6);
+
+        Bridge::claim<USDT>(user_acc);
+    }
+
+
     // HELPERS
 
     fun initialize_modules(): signer {
