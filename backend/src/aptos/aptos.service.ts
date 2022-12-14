@@ -82,8 +82,8 @@ export class AptosService {
 
     const receipts = events.map((e) => {
       return {
-        from: e.data.from,
-        to: e.data.to,
+        from: this.padLeftZeros64(e.data.from),
+        to: e.data.to.length === 42 ? e.data.to : this.padLeftZeros64(e.data.to),
         tokenSymbol: e.data.token_symbol,
         amount: e.data.amount,
         chainFrom: chainId,
@@ -112,9 +112,16 @@ export class AptosService {
     this.claimEventsNonce = Number(events[last].sequence_number) + 1
 
     for (const event of events) {
-      this.dbAccessSevice.fullfillReceipts({ to: event.data.to })
+      this.dbAccessSevice.fullfillReceipts({ to: this.padLeftZeros64(event.data.claimee) })
     }
 
     return events.length
+  }
+  
+  private padLeftZeros64(address: string): string {
+    const rawAddress = address.substring(2)
+    const zerosCount = 64 - rawAddress.length
+
+    return `0x${'0'.repeat(zerosCount)}${rawAddress}`
   }
 }
