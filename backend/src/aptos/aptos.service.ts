@@ -50,7 +50,21 @@ export class AptosService {
   }
 
   isAptosAddress(str: string): boolean {
-    return str.length === 66
+    return str.length > 42
+  }
+
+  padLeftZeros40(address: string): string {
+    const rawAddress = address.substring(2)
+    const zerosCount = 40 - rawAddress.length
+
+    return `0x${'0'.repeat(zerosCount)}${rawAddress}`
+  }
+
+  padLeftZeros64(address: string): string {
+    const rawAddress = address.substring(2)
+    const zerosCount = 64 - rawAddress.length
+
+    return `0x${'0'.repeat(zerosCount)}${rawAddress}`
   }
 
   private async startFetchingEvents(): Promise<void> {
@@ -83,7 +97,7 @@ export class AptosService {
     const receipts = events.map((e) => {
       return {
         from: this.padLeftZeros64(e.data.from),
-        to: e.data.to.length === 42 ? e.data.to : this.padLeftZeros64(e.data.to),
+        to: this.isAptosAddress(e.data.to) ? this.padLeftZeros64(e.data.to) : this.padLeftZeros40(e.data.to),
         tokenSymbol: e.data.token_symbol,
         amount: e.data.amount,
         chainFrom: chainId,
@@ -116,12 +130,5 @@ export class AptosService {
     }
 
     return events.length
-  }
-
-  private padLeftZeros64(address: string): string {
-    const rawAddress = address.substring(2)
-    const zerosCount = 64 - rawAddress.length
-
-    return `0x${'0'.repeat(zerosCount)}${rawAddress}`
   }
 }
